@@ -5,7 +5,7 @@ using ExcelLibray;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         // Path to your Excel file
         string filePath = "C:\\Users\\v-abdideresa\\Desktop\\Data.xlsx"; ;

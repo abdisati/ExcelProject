@@ -27,8 +27,8 @@ public class ProgramTest
             .Returns(mockRowsUsed.Object);
         mockWorksheet.Setup(ws => ws.RowsUsed(It.IsAny<Func<IXLRow, bool>>()))
             .Returns(mockRowsUsed.Object);
-      mockWorksheet.Setup(ws => ws.RowsUsed(XLCellsUsedOptions.AllContents, null))
-             .Returns(mockRowsUsed.Object);
+        mockWorksheet.Setup(ws => ws.RowsUsed(XLCellsUsedOptions.AllContents, null))
+               .Returns(mockRowsUsed.Object);
 
 
         var people = new List<Person>();
@@ -56,7 +56,7 @@ public class ProgramTest
         Assert.AreEqual("New York", people[0].City);
     }
 
-    private IXLRow CreateMockRow(string name, int age, string city)
+    private static IXLRow CreateMockRow(string name, int age, string city)
     {
         var mockRow = new Mock<IXLRow>();
         mockRow.Setup(row => row.Cell(1).GetValue<string>()).Returns(name);
