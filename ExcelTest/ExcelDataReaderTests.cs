@@ -6,10 +6,10 @@ using Moq;
 using ExcelLibray;
 
 [TestClass]
-public class ProgramTest
+public class ExcelDataReaderTests
 {
     [TestMethod]
-    public void TestExcelReading()
+    public void TestExcelReadingParsesRowsCorrectly()
     {
         // Arrange
         var mockWorkbook = new Mock<IXLWorkbook>();
