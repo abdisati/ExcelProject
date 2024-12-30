@@ -5,16 +5,30 @@ using ExcelLibray;
 
 namespace ExcelDataReaderApp
 {
-
     class ExcelReaderProgram
     {
         static void Main()
         {
-            // Path to your Excel file
-            string filePath = "C:\\Users\\v-abdideresa\\Desktop\\Data.xlsx"; ;
+            // Accept an input string from the user specifying the Excel file to open
+            Console.WriteLine("Enter the path to the Excel file:");
+            string? filePath = Console.ReadLine();
 
-            // List to store rows as Person objects
-            List<Person> people = new List<Person>();
+            // Call LoadPeopleFromExcel function to process the file
+            if (string.IsNullOrEmpty(filePath))
+            {
+                Console.WriteLine("Invalid file path.");
+                return;
+            }
+
+            Dictionary<string, Person> people = LoadPeopleFromExcel(filePath);
+
+            // Print the contents of the dictionary
+            PrintPeople(people);
+        }
+
+        static Dictionary<string, Person> LoadPeopleFromExcel(string filePath)
+        {
+            Dictionary<string, Person> people = new Dictionary<string, Person>();
 
             // Open the Excel file
             using (var workbook = new XLWorkbook(filePath))
@@ -25,18 +39,51 @@ namespace ExcelDataReaderApp
                 // Skip the header row
                 foreach (var row in rows.Skip(1))
                 {
-                    // Read each cell
-                    string name = row.Cell(1).GetValue<string>();
-                    int age = row.Cell(2).GetValue<int>();
-                    string city = row.Cell(3).GetValue<string>();
-
-                    // Create a new Person object and add to the list
-                    people.Add(new Person { Name = name, Age = age, City = city });
+                    // Read each row and add to the dictionary
+                    Person person = ReadRow(row);
+                    AddPerson(people, person);
                 }
             }
 
-            // Print the contents of the list
-            foreach (var person in people)
+            return people;
+        }
+
+        static Person ReadRow(IXLRow row)
+        {
+            string name = row.Cell(1).GetValue<string>();
+            int age;
+            string city = row.Cell(3).GetValue<string>();
+
+            try
+            {
+                age = row.Cell(2).GetValue<int>();
+            }
+            catch
+            {
+                age = -1; // Default value for invalid age
+            }
+
+            if (string.IsNullOrEmpty(city))
+            {
+                city = "Unknown"; // Default value for invalid city
+            }
+
+            return new Person { Name = name, Age = age, City = city };
+        }
+
+        static void AddPerson(Dictionary<string, Person> people, Person person)
+        {
+            string key = $"{person.Name}-{person.Age}-{person.City}";
+
+            if (!people.ContainsKey(key))
+            {
+                people.Add(key, person);
+            }
+        }
+
+        static void PrintPeople(Dictionary<string, Person> people)
+        {
+            foreach (var person in people.Values.OrderBy(p => p.Name))
             {
                 Console.WriteLine(person);
             }
