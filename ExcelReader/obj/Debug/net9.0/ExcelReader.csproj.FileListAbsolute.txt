@@ -24,3 +24,4 @@ C:\Users\v-abdideresa\ExcelProject\ExcelReader\obj\Debug\net9.0\refint\ExcelRead
 C:\Users\v-abdideresa\ExcelProject\ExcelReader\obj\Debug\net9.0\ExcelReader.pdb
 C:\Users\v-abdideresa\ExcelProject\ExcelReader\obj\Debug\net9.0\ExcelReader.genruntimeconfig.cache
 C:\Users\v-abdideresa\ExcelProject\ExcelReader\obj\Debug\net9.0\ref\ExcelReader.dll
+C:\Users\v-abdideresa\ExcelProject\ExcelReader\obj\Debug\net9.0\ExcelReader.sourcelink.json

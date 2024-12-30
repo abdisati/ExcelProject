@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ExcelLibray")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25e450f09612f6bc7b5cc0b8f72564f15f1e0746")]
 [assembly: System.Reflection.AssemblyProductAttribute("ExcelLibray")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ExcelLibray")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

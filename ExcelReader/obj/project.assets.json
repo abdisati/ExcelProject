@@ -321,11 +321,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelReader\\ExcelReader.csproj",
+      "projectUniqueName": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelReader\\ExcelReader.csproj",
       "projectName": "ExcelReader",
-      "projectPath": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelReader\\ExcelReader.csproj",
+      "projectPath": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelReader\\ExcelReader.csproj",
       "packagesPath": "C:\\Users\\v-abdideresa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelReader\\obj\\",
+      "outputPath": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelReader\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\v-abdideresa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -340,8 +340,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj": {
-              "projectPath": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj"
+            "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj": {
+              "projectPath": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj"
             }
           }
         }

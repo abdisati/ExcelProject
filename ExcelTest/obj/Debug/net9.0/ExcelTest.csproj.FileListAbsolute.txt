@@ -187,3 +187,4 @@ C:\Users\v-abdideresa\ExcelProject\ExcelTest\obj\Debug\net9.0\refint\ExcelTest.d
 C:\Users\v-abdideresa\ExcelProject\ExcelTest\obj\Debug\net9.0\ExcelTest.pdb
 C:\Users\v-abdideresa\ExcelProject\ExcelTest\obj\Debug\net9.0\ExcelTest.genruntimeconfig.cache
 C:\Users\v-abdideresa\ExcelProject\ExcelTest\obj\Debug\net9.0\ref\ExcelTest.dll
+C:\Users\v-abdideresa\ExcelProject\ExcelTest\obj\Debug\net9.0\ExcelTest.sourcelink.json

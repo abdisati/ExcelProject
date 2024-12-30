@@ -10,3 +10,4 @@ C:\Users\v-abdideresa\ExcelProject\ExcelLibray\obj\Debug\net9.0\ExcelLibray.dll
 C:\Users\v-abdideresa\ExcelProject\ExcelLibray\obj\Debug\net9.0\refint\ExcelLibray.dll
 C:\Users\v-abdideresa\ExcelProject\ExcelLibray\obj\Debug\net9.0\ExcelLibray.pdb
 C:\Users\v-abdideresa\ExcelProject\ExcelLibray\obj\Debug\net9.0\ref\ExcelLibray.dll
+C:\Users\v-abdideresa\ExcelProject\ExcelLibray\obj\Debug\net9.0\ExcelLibray.sourcelink.json

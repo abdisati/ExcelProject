@@ -302,11 +302,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj",
+      "projectUniqueName": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj",
       "projectName": "ExcelLibray",
-      "projectPath": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj",
+      "projectPath": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelLibray\\ExcelLibray.csproj",
       "packagesPath": "C:\\Users\\v-abdideresa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\v-abdideresa\\ExcelProject\\ExcelLibray\\obj\\",
+      "outputPath": "C:\\Users\\v-abdideresa\\Desktop\\ExcelProject\\ExcelLibray\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\v-abdideresa\\AppData\\Roaming\\NuGet\\NuGet.Config"
