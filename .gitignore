@@ -9,6 +9,20 @@ obj/
 *.user
 *.userosscache
 *.sln.docstates
+# Ignore .pdb files (debugging symbols)
+*.pdb
+
+# Ignore AssemblyInfo cache
+AssemblyInfoInputs.cache
+
+# Ignore all .cache files
+*.cache
+
+# Ignore apphost.exe (executable)
+apphost.exe
+
+# Ignore generated AssemblyInfo files if you don't want to track them
+AssemblyInfo.cs
 
 ## Ignore dependency folders (NuGet packages)
 packages/
@@ -58,3 +72,11 @@ obj/
 
 # Ignore JetBrains ReSharper files
 .reSharper/
+ExcelLibray/obj/Debug/net9.0/ExcelLibray.AssemblyInfo.cs
+ExcelLibray/obj/Debug/net9.0/ExcelLibray.csproj.FileListAbsolute.txt
+ExcelReader/obj/Debug/net9.0/apphost.exe
+ExcelReader/obj/Debug/net9.0/ExcelReader.AssemblyInfo.cs
+ExcelReader/obj/Debug/net9.0/ExcelReader.csproj.FileListAbsolute.txt
+ExcelTest/bin/Debug/net9.0/ExcelReader.exe
+ExcelTest/obj/Debug/net9.0/ExcelTest.AssemblyInfo.cs
+ExcelTest/obj/Debug/net9.0/ExcelTest.csproj.FileListAbsolute.txt
