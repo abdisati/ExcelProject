@@ -131,14 +131,8 @@ namespace ExcelDataReaderApp
             Console.WriteLine(message); // Print the error message
         }
 
-        public static void AddPerson(Dictionary<string, Person> people, Person? person)
+        public static void AddPerson(Dictionary<string, Person> people, Person person)
         {
-            if (person == null)
-            {
-                LogError("Cannot add a null person to the dictionary.");
-                return;
-            }
-
             string key = $"{person.Name?.Trim().ToLower()}-{person.Age}-{person.City?.Trim().ToLower()}";
 
             // Check if the key already exists in the dictionary
