@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ExcelDataReaderApp
 {
-    class ExcelReaderProgram
+   public class ExcelReaderProgram
     {
         static void Main()
         {
@@ -14,12 +14,14 @@ namespace ExcelDataReaderApp
             Console.WriteLine("Enter the path to the Excel file:");
             string? filePath = Console.ReadLine()?.Trim('"');
 
-            // Call LoadPeopleFromExcel function to process the file
+            // Check if the file path is valid
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
                 Console.WriteLine("Invalid file path.");
                 return;
             }
+
+            // Load the people from the Excel file
 
             Dictionary<string, Person> people = LoadPeopleFromExcel(filePath);
 
@@ -27,7 +29,7 @@ namespace ExcelDataReaderApp
             PrintPeople(people);
         }
 
-        static Dictionary<string, Person> LoadPeopleFromExcel(string filePath)
+        public static Dictionary<string, Person> LoadPeopleFromExcel(string filePath)
         {
             Dictionary<string, Person> people = new Dictionary<string, Person>();
 
@@ -49,7 +51,7 @@ namespace ExcelDataReaderApp
             return people;
         }
 
-        static Person ReadRow(IXLRow row)
+       public static Person ReadRow(IXLRow row)
         {
             string name = row.Cell(1).GetValue<string>();
             int age;
@@ -72,7 +74,7 @@ namespace ExcelDataReaderApp
             return new Person { Name = name, Age = age, City = city };
         }
 
-        static void AddPerson(Dictionary<string, Person> people, Person person)
+       public static void AddPerson(Dictionary<string, Person> people, Person person)
         {
             string key = $"{person.Name}-{person.Age}-{person.City}";
 
@@ -82,7 +84,7 @@ namespace ExcelDataReaderApp
             }
         }
 
-        static void PrintPeople(Dictionary<string, Person> people)
+      public  static void PrintPeople(Dictionary<string, Person> people)
         {
             foreach (var person in people.Values.OrderBy(p => p.Name))
             {
