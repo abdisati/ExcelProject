@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ClosedXML.Excel;
 using ExcelLibray;
+using System.IO;
 
 namespace ExcelDataReaderApp
 {
@@ -11,10 +12,10 @@ namespace ExcelDataReaderApp
         {
             // Accept an input string from the user specifying the Excel file to open
             Console.WriteLine("Enter the path to the Excel file:");
-            string? filePath = Console.ReadLine();
+            string? filePath = Console.ReadLine()?.Trim('"');
 
             // Call LoadPeopleFromExcel function to process the file
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
                 Console.WriteLine("Invalid file path.");
                 return;
