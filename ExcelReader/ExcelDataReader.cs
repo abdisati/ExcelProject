@@ -33,19 +33,33 @@ namespace ExcelDataReaderApp
         {
             Dictionary<string, Person> people = new Dictionary<string, Person>();
 
-            // Open the Excel file
-            using (var workbook = new XLWorkbook(filePath))
+            try
             {
-                var worksheet = workbook.Worksheet(1); // Get the first sheet
-                var rows = worksheet.RowsUsed();      // Get rows with data
-
-                // Skip the header row
-                foreach (var row in rows.Skip(1))
+                // Open the Excel file
+                using (var workbook = new XLWorkbook(filePath))
                 {
-                    // Read each row and add to the dictionary
-                    Person person = ReadRow(row);
-                    AddPerson(people, person);
+                    var worksheet = workbook.Worksheet(1); // Get the first sheet
+                    var rows = worksheet.RowsUsed();      // Get rows with data
+
+                    // Skip the header row
+                    foreach (var row in rows.Skip(1))
+                    {
+                        try
+                        {
+                            // Read each row and add to the dictionary
+                            Person person = ReadRow(row);
+                            AddPerson(people, person);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogError($"Error processing row: {ex.Message}");
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogError($"Error loading Excel file: {ex.Message}");
             }
 
             return people;
@@ -117,7 +131,7 @@ namespace ExcelDataReaderApp
             Console.WriteLine(message); // Print the error message
         }
 
-        public static void AddPerson(Dictionary<string, Person> people, Person person)
+        public static void AddPerson(Dictionary<string, Person> people, Person? person)
         {
             if (person == null)
             {
