@@ -53,25 +53,68 @@ namespace ExcelDataReaderApp
 
        public static Person ReadRow(IXLRow row)
         {
-            string name = row.Cell(1).GetValue<string>();
+            string? name;
             int age;
-            string city = row.Cell(3).GetValue<string>();
+            string? city;
 
             try
             {
-                age = row.Cell(2).GetValue<int>();
+                // Safely get the name and handle null/empty values
+                name = row.Cell(1).GetValue<string>()?.Trim();
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = "Unknown"; // Default for invalid name
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                age = -1; // Default value for invalid age
+                LogError($"Error reading 'Name' from row: {ex.Message}");
+                name = "Unknown";
             }
 
-            if (string.IsNullOrEmpty(city))
+            try
             {
-                city = "Unknown"; // Default value for invalid city
+                // Safely parse age and handle invalid formats
+                age = row.Cell(2).GetValue<int>();
+            }
+            catch (FormatException ex)
+            {
+                LogError($"Invalid format for 'Age' in row: {ex.Message}");
+                age = -1; // Default value for invalid age
+            }
+            catch (InvalidCastException ex)
+            {
+                LogError($"Invalid data type for 'Age' in row: {ex.Message}");
+                age = -1;
+            }
+            catch (Exception ex)
+            {
+                LogError($"Unexpected error reading 'Age' from row: {ex.Message}");
+                age = -1;
+            }
+
+            try
+            {
+                // Safely get the city and handle null/empty values
+                city = row.Cell(3).GetValue<string>()?.Trim();
+                if (string.IsNullOrEmpty(city))
+                {
+                    city = "Unknown"; // Default for invalid city
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError($"Error reading 'City' from row: {ex.Message}");
+                city = "Unknown";
             }
 
             return new Person { Name = name, Age = age, City = city };
+        }
+
+        // Optional: Replace this with your actual logging mechanism
+        private static void LogError(string message)
+        {
+            Console.WriteLine(message); // Or use a logging library
         }
 
        public static void AddPerson(Dictionary<string, Person> people, Person person)
