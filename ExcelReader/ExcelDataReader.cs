@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ExcelDataReaderApp
 {
-   public class ExcelReaderProgram
+    public class ExcelReaderProgram
     {
         static void Main()
         {
@@ -51,7 +51,7 @@ namespace ExcelDataReaderApp
             return people;
         }
 
-       public static Person ReadRow(IXLRow row)
+        public static Person ReadRow(IXLRow row)
         {
             string? name;
             int age;
@@ -111,23 +111,34 @@ namespace ExcelDataReaderApp
             return new Person { Name = name, Age = age, City = city };
         }
 
-        // Optional: Replace this with your actual logging mechanism
+        // Log an error message
         private static void LogError(string message)
         {
-            Console.WriteLine(message); // Or use a logging library
+            Console.WriteLine(message); // Print the error message
         }
 
-       public static void AddPerson(Dictionary<string, Person> people, Person person)
+        public static void AddPerson(Dictionary<string, Person> people, Person person)
         {
-            string key = $"{person.Name}-{person.Age}-{person.City}";
+            if (person == null)
+            {
+                LogError("Cannot add a null person to the dictionary.");
+                return;
+            }
 
+            string key = $"{person.Name?.Trim().ToLower()}-{person.Age}-{person.City?.Trim().ToLower()}";
+
+            // Check if the key already exists in the dictionary
             if (!people.ContainsKey(key))
             {
                 people.Add(key, person);
             }
+            else
+            {
+                LogError($"Duplicate entry detected: {person.Name}, {person.Age}, {person.City}");
+            }
         }
 
-      public  static void PrintPeople(Dictionary<string, Person> people)
+        public static void PrintPeople(Dictionary<string, Person> people)
         {
             foreach (var person in people.Values.OrderBy(p => p.Name))
             {
