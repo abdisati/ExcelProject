@@ -5,6 +5,8 @@ using Moq;
 using ExcelLibray;
 using ExcelDataReaderApp;
 
+namespace ExcelDataReaderTest{
+
 [TestClass]
 public class ReadRowTests
 {
@@ -70,4 +72,4 @@ public class ReadRowTests
 
         return mockRow.Object;
     }
-}
+}}

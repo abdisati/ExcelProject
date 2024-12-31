@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelLibray;
 using ExcelDataReaderApp;
 
+namespace ExcelDataReaderTest{
+
 [TestClass]
 public class PrintPeopleTests
 {
@@ -50,4 +52,4 @@ public class PrintPeopleTests
             Assert.AreEqual(string.Empty, output);
         }
     }
-}
+}}

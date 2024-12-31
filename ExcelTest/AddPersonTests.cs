@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelLibray;
 using ExcelDataReaderApp;
+namespace ExcelDataReaderTest{
 
 [TestClass]
 public class AddPersonTests
@@ -66,4 +67,4 @@ public class AddPersonTests
         // Assert
         Assert.AreEqual(1, people.Count);
     }
-}
+}}

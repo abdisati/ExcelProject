@@ -4,7 +4,8 @@ using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ExcelLibray;
-
+namespace ExcelDataReaderTest
+{
 [TestClass]
 public class ExcelDataReaderTests
 {
@@ -64,4 +65,4 @@ public class ExcelDataReaderTests
         mockRow.Setup(row => row.Cell(3).GetValue<string>()).Returns(city);
         return mockRow.Object;
     }
-}
+}}
