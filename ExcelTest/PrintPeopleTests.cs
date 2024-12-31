@@ -5,51 +5,53 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelLibray;
 using ExcelDataReaderApp;
 
-namespace ExcelDataReaderTest{
-
-[TestClass]
-public class PrintPeopleTests
+namespace ExcelDataReaderTest
 {
-    [TestMethod]
-    public void TestPrintPeople()
+
+    [TestClass]
+    public class PrintPeopleTests
     {
-        // Arrange
-        var people = new Dictionary<string, Person>
+        [TestMethod]
+        public void TestPrintPeople()
+        {
+            // Arrange
+            var people = new Dictionary<string, Person>
         {
             { "john doe-30-new york", new Person { Name = "John Doe", Age = 30, City = "New York" } },
             { "jane smith-25-los angeles", new Person { Name = "Jane Smith", Age = 25, City = "Los Angeles" } }
         };
 
-        using (var sw = new StringWriter())
+            using (var sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                // Act
+                ExcelReaderProgram.PrintPeople(people);
+
+                // Assert
+                var output = sw.ToString().Trim();
+                var expectedOutput = "Name: Jane Smith, Age: 25, City: Los Angeles\nName: John Doe, Age: 30, City: New York";
+                Assert.AreEqual(expectedOutput, output);
+            }
+        }
+
+        [TestMethod]
+        public void TestPrintPeople_EmptyDictionary()
         {
-            Console.SetOut(sw);
+            // Arrange
+            var people = new Dictionary<string, Person>();
 
-            // Act
-            ExcelReaderProgram.PrintPeople(people);
+            using (var sw = new StringWriter())
+            {
+                Console.SetOut(sw);
 
-            // Assert
-            var output = sw.ToString().Trim();
-            var expectedOutput = "Name: Jane Smith, Age: 25, City: Los Angeles\nName: John Doe, Age: 30, City: New York";
-            Assert.AreEqual(expectedOutput, output);
+                // Act
+                ExcelReaderProgram.PrintPeople(people);
+
+                // Assert
+                var output = sw.ToString().Trim();
+                Assert.AreEqual(string.Empty, output);
+            }
         }
     }
-
-    [TestMethod]
-    public void TestPrintPeople_EmptyDictionary()
-    {
-        // Arrange
-        var people = new Dictionary<string, Person>();
-
-        using (var sw = new StringWriter())
-        {
-            Console.SetOut(sw);
-
-            // Act
-            ExcelReaderProgram.PrintPeople(people);
-
-            // Assert
-            var output = sw.ToString().Trim();
-            Assert.AreEqual(string.Empty, output);
-        }
-    }
-}}
+}

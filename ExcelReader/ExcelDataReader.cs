@@ -148,7 +148,7 @@ namespace ExcelDataReaderApp
             }
             else
             {
-                LogError($"Duplicate entry detected: {person.Name}, {person.Age}, {person.City}");
+                LogError($"Duplicate entry detected: {person.Name?.Trim()}, {person.Age}, {person.City?.Trim()}");
             }
         }
 
@@ -156,7 +156,11 @@ namespace ExcelDataReaderApp
         {
             foreach (var person in people.Values.OrderBy(p => p.Name))
             {
-                Console.WriteLine(person);
+                Console.Write($"Name: {person.Name}, Age: {person.Age}, City: {person.City}");
+                if (!person.Equals(people.Values.OrderBy(p => p.Name).Last()))
+                {
+                    Console.Write("\n");
+                }
             }
         }
     }
