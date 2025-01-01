@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -7,12 +8,51 @@ using ExcelDataReaderApp;
 
 namespace ExcelDataReaderTest
 {
-
     [TestClass]
     public class ReadRowTests
     {
+        private TextWriter? originalOut;
+        private StringWriter? stringWriter;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            originalOut = Console.Out;
+            stringWriter = new StringWriter();
+            Console.SetOut(stringWriter);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (originalOut != null)
+            {
+                Console.SetOut(originalOut);
+            }
+            stringWriter?.Dispose();
+            stringWriter = null; // Ensure no residual state
+        }
+
+        private string CaptureConsoleOutput(Action action)
+        {
+            using (var sw = new StringWriter())
+            {
+                var originalOut = Console.Out;
+                try
+                {
+                    Console.SetOut(sw);
+                    action();
+                    return sw.ToString().Trim();
+                }
+                finally
+                {
+                    Console.SetOut(originalOut);
+                }
+            }
+        }
+
         [TestMethod]
-        public void TestReadRow_ValidData()
+        public void TestReadRow_ValidData_ReturnsCorrectPerson()
         {
             // Arrange
             var mockRow = CreateMockRow("John Doe", 30, "New York");
@@ -27,35 +67,27 @@ namespace ExcelDataReaderTest
         }
 
         [TestMethod]
-        public void TestReadRow_InvalidAge()
+        public void TestReadRow_InvalidAge_ReturnsDefaultForInvalidAge()
         {
             // Arrange
             var mockRow = CreateMockRow("John Doe", "invalid_age", "New York");
-            var originalOut = Console.Out;
 
-            using (var sw = new StringWriter())
+            // Act
+            var output = CaptureConsoleOutput(() => 
             {
-                Console.SetOut(sw);
-
-                // Act
                 var person = ExcelReaderProgram.ReadRow(mockRow);
 
                 // Assert
                 Assert.AreEqual("John Doe", person.Name);
                 Assert.AreEqual(-1, person.Age); // Default value for invalid age
                 Assert.AreEqual("New York", person.City);
+            });
 
-                var output = sw.ToString().Trim();
-                Assert.IsTrue(output.Contains("Invalid data type for 'Age'"), "Expected error message for invalid age not found.");
-
-            }
-
-            // Reset the console output
-            Console.SetOut(originalOut);
+            Assert.IsTrue(output.Contains("Invalid data type for 'Age'"), "Expected error message for invalid age not found.");
         }
 
         [TestMethod]
-        public void TestReadRow_EmptyCity()
+        public void TestReadRow_EmptyCity_ReturnsDefaultForEmptyCity()
         {
             // Arrange
             var mockRow = CreateMockRow("John Doe", 30, "");

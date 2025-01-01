@@ -7,32 +7,38 @@ using ExcelDataReaderApp;
 
 namespace ExcelDataReaderTest
 {
-
     [TestClass]
     public class PrintPeopleTests
     {
-        [TestMethod]
-        public void TestPrintPeople()
-        {
-            // Arrange
-            var people = new Dictionary<string, Person>
-        {
-            { "john doe-30-new york", new Person { Name = "John Doe", Age = 30, City = "New York" } },
-            { "jane smith-25-los angeles", new Person { Name = "Jane Smith", Age = 25, City = "Los Angeles" } }
-        };
+        private TextWriter? originalOut;
+        private StringWriter? stringWriter;
 
-            using (var sw = new StringWriter())
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            originalOut = Console.Out;
+            stringWriter = new StringWriter(); // Create a new StringWriter for each test
+            Console.SetOut(stringWriter); // Redirect Console output to StringWriter
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            // Reset the console output to its original state
+            if (originalOut != null)
             {
-                Console.SetOut(sw);
-
-                // Act
-                ExcelReaderProgram.PrintPeople(people);
-
-                // Assert
-                var output = sw.ToString().Trim();
-                var expectedOutput = "Name: Jane Smith, Age: 25, City: Los Angeles\nName: John Doe, Age: 30, City: New York";
-                Assert.AreEqual(expectedOutput, output);
+                Console.SetOut(originalOut);
             }
+            stringWriter?.Dispose();
+            stringWriter = null; // Ensure no residual state
+        }
+
+        private string CaptureConsoleOutput(Action action)
+        {
+            // Since the console output is already redirected in TestInitialize, 
+            // this method simply executes the action without needing nested redirection.
+            action();
+            return stringWriter!.ToString().Trim(); // Capture output from the existing stringWriter
         }
 
         [TestMethod]
@@ -41,17 +47,29 @@ namespace ExcelDataReaderTest
             // Arrange
             var people = new Dictionary<string, Person>();
 
-            using (var sw = new StringWriter())
+            // Act
+            var output = CaptureConsoleOutput(() => ExcelReaderProgram.PrintPeople(people));
+
+            // Assert
+            Assert.AreEqual(string.Empty, output);
+        }
+
+        [TestMethod]
+        public void TestPrintPeople()
+        {
+            // Arrange
+            var people = new Dictionary<string, Person>
             {
-                Console.SetOut(sw);
+                { "john doe-30-new york", new Person { Name = "John Doe", Age = 30, City = "New York" } },
+                { "jane smith-25-los angeles", new Person { Name = "Jane Smith", Age = 25, City = "Los Angeles" } }
+            };
 
-                // Act
-                ExcelReaderProgram.PrintPeople(people);
+            // Act
+            var output = CaptureConsoleOutput(() => ExcelReaderProgram.PrintPeople(people));
 
-                // Assert
-                var output = sw.ToString().Trim();
-                Assert.AreEqual(string.Empty, output);
-            }
+            // Assert
+            var expectedOutput = "Name: Jane Smith, Age: 25, City: Los Angeles\r\nName: John Doe, Age: 30, City: New York";
+            Assert.AreEqual(expectedOutput, output);
         }
     }
 }

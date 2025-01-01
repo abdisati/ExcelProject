@@ -150,11 +150,7 @@ namespace ExcelDataReaderApp
         {
             foreach (var person in people.Values.OrderBy(p => p.Name))
             {
-                Console.Write($"Name: {person.Name}, Age: {person.Age}, City: {person.City}");
-                if (!person.Equals(people.Values.OrderBy(p => p.Name).Last()))
-                {
-                    Console.Write("\n");
-                }
+                Console.WriteLine($"Name: {person.Name}, Age: {person.Age}, City: {person.City}");
             }
         }
     }
