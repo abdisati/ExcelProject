@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
 using ExcelLibray;
-using System.IO;
 
 namespace ExcelDataReaderApp
 {
@@ -10,36 +11,51 @@ namespace ExcelDataReaderApp
     {
         static void Main()
         {
-            // Accept an input string from the user specifying the Excel file to open
-            Console.WriteLine("Enter the path to the Excel file:");
-            string? filePath = Console.ReadLine()?.Trim('"');
+            // Accept input strings from the user specifying the Excel files and sheets to open
+            Console.WriteLine("Enter the path to the first Excel file:");
+            string? filePath1 = Console.ReadLine()?.Trim('"');
+            Console.WriteLine("Enter the sheet name for the first Excel file:");
+            string? sheetName1 = Console.ReadLine()?.Trim();
 
-            // Check if the file path is valid
-            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            Console.WriteLine("Enter the path to the second Excel file:");
+            string? filePath2 = Console.ReadLine()?.Trim('"');
+            Console.WriteLine("Enter the sheet name for the second Excel file:");
+            string? sheetName2 = Console.ReadLine()?.Trim();
+
+            // Check if the file paths are valid
+            if (string.IsNullOrEmpty(filePath1) || !File.Exists(filePath1) ||
+                string.IsNullOrEmpty(filePath2) || !File.Exists(filePath2))
             {
-                Console.WriteLine("Invalid file path.");
+                Console.WriteLine("Invalid file path(s).");
                 return;
             }
 
-            // Load the people from the Excel file
+            // Check if the sheet names are valid
+            if (string.IsNullOrEmpty(sheetName1) || string.IsNullOrEmpty(sheetName2))
+            {
+                Console.WriteLine("Invalid sheet name(s).");
+                return;
+            }
 
-            Dictionary<string, Person> people = LoadPeopleFromExcel(filePath);
+            // Load the people from the Excel files
+            Dictionary<string, List<Person>> peopleSheet1 = LoadPeopleFromExcel(filePath1, sheetName1);
+            Dictionary<string, List<Person>> peopleSheet2 = LoadPeopleFromExcel(filePath2, sheetName2);
 
-            // Print the contents of the dictionary
-            PrintPeople(people);
+            // Compare the data from the two sheets
+            CompareAndPrintResults(peopleSheet1, peopleSheet2);
         }
 
-        public static Dictionary<string, Person> LoadPeopleFromExcel(string filePath)
+        public static Dictionary<string, List<Person>> LoadPeopleFromExcel(string filePath, string sheetName)
         {
-            Dictionary<string, Person> people = new Dictionary<string, Person>();
+            Dictionary<string, List<Person>> people = new Dictionary<string, List<Person>>();
 
             try
             {
                 // Open the Excel file
                 using (var workbook = new XLWorkbook(filePath))
                 {
-                    var worksheet = workbook.Worksheet(1); // Get the first sheet
-                    var rows = worksheet.RowsUsed();      // Get rows with data
+                    var worksheet = workbook.Worksheet(sheetName); // Get the specified sheet
+                    var rows = worksheet.RowsUsed();               // Get rows with data
 
                     // Skip the header row
                     foreach (var row in rows.Skip(1))
@@ -131,26 +147,66 @@ namespace ExcelDataReaderApp
             Console.WriteLine(message); // Print the error message
         }
 
-        public static void AddPerson(Dictionary<string, Person> people, Person person)
+        public static void AddPerson(Dictionary<string, List<Person>> people, Person person)
         {
-            string key = $"{person.Name?.Trim().ToLower()}-{person.Age}-{person.City?.Trim().ToLower()}";
+            string key = (person.Name ?? "unknown").Trim().ToLower();
 
-            // Check if the key already exists in the dictionary
             if (!people.ContainsKey(key))
             {
-                people.Add(key, person);
+                people[key] = new List<Person>();
             }
-            else
-            {
-                LogError($"Duplicate entry detected: {person.Name?.Trim()}, {person.Age}, {person.City?.Trim()}");
-            }
+
+            people[key].Add(person);
         }
 
-        public static void PrintPeople(Dictionary<string, Person> people)
+        public static void CompareAndPrintResults(Dictionary<string, List<Person>> peopleSheet1, Dictionary<string, List<Person>> peopleSheet2)
         {
-            foreach (var person in people.Values.OrderBy(p => p.Name))
+            var allNames = new HashSet<string>(peopleSheet1.Keys.Concat(peopleSheet2.Keys));
+
+            foreach (var name in allNames)
             {
-                Console.WriteLine($"Name: {person.Name}, Age: {person.Age}, City: {person.City}");
+                bool inSheet1 = peopleSheet1.TryGetValue(name, out var persons1);
+                bool inSheet2 = peopleSheet2.TryGetValue(name, out var persons2);
+
+                if (inSheet1 && inSheet2)
+                {
+                    foreach (var person1 in persons1!)
+                    {
+                        foreach (var person2 in persons2!)
+                        {
+                            if (person1.Name == person2.Name && person1.Age == person2.Age && person1.City == person2.City)
+                            {
+                                Console.WriteLine($"Exact match: {person1}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Partial match for {person1.Name}:");
+                                if (person1.Age != person2.Age)
+                                {
+                                    Console.WriteLine($"  Age differs: Sheet1={person1.Age}, Sheet2={person2.Age}");
+                                }
+                                if (person1.City != person2.City)
+                                {
+                                    Console.WriteLine($"  City differs: Sheet1={person1.City}, Sheet2={person2.City}");
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (inSheet1)
+                {
+                    foreach (var person in persons1!)
+                    {
+                        Console.WriteLine($"Only in Sheet1: {person}");
+                    }
+                }
+                else if (inSheet2)
+                {
+                    foreach (var person in persons2!)
+                    {
+                        Console.WriteLine($"Only in Sheet2: {person}");
+                    }
+                }
             }
         }
     }
