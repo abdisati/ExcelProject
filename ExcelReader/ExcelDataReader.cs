@@ -9,7 +9,7 @@ namespace ExcelDataReaderApp
 {
     public class ExcelReaderProgram
     {
-        static void Main()
+        public static void Main()
         {
             // Accept input strings from the user specifying the Excel files and sheets to open
             Console.WriteLine("Enter the path to the first Excel file:");
