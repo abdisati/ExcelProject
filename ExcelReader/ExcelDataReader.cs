@@ -161,6 +161,7 @@ namespace ExcelDataReaderApp
 
         public static void CompareAndPrintResults(Dictionary<string, List<Person>> peopleSheet1, Dictionary<string, List<Person>> peopleSheet2)
         {
+            // Get all unique names from both sheets
             var allNames = new HashSet<string>(peopleSheet1.Keys.Concat(peopleSheet2.Keys));
 
             foreach (var name in allNames)

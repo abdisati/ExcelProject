@@ -8,53 +8,13 @@ using ExcelDataReaderApp;
 namespace ExcelDataReaderTest
 {
     [TestClass]
-    public class AddPersonTests
+    public class AddPersonTestsTest
     {
-        private TextWriter? originalOut;
-        private StringWriter? stringWriter;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            originalOut = Console.Out;
-            stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            if (originalOut != null)
-            {
-                Console.SetOut(originalOut);
-            }
-            stringWriter?.Dispose();
-            stringWriter = null; // Ensure no residual state
-        }
-
-        private string CaptureConsoleOutput(Action action)
-        {
-            using (var sw = new StringWriter())
-            {
-                var originalOut = Console.Out;
-                try
-                {
-                    Console.SetOut(sw);
-                    action();
-                    return sw.ToString().Trim();
-                }
-                finally
-                {
-                    Console.SetOut(originalOut);
-                }
-            }
-        }
-
         [TestMethod]
         public void TestAddPerson_ValidPerson()
         {
             // Arrange
-            var people = new Dictionary<string, Person>();
+            var people = new Dictionary<string, List<Person>>();
             var person = new Person { Name = "John Doe", Age = 30, City = "New York" };
 
             // Act
@@ -62,34 +22,32 @@ namespace ExcelDataReaderTest
 
             // Assert
             Assert.AreEqual(1, people.Count);
-            Assert.IsTrue(people.ContainsKey("john doe-30-new york"));
+            Assert.IsTrue(people.ContainsKey("john doe"));
+            Assert.AreEqual(1, people["john doe"].Count);
         }
 
         [TestMethod]
         public void TestAddPerson_DuplicatePerson()
         {
             // Arrange
-            var people = new Dictionary<string, Person>();
+            var people = new Dictionary<string, List<Person>>();
             var person1 = new Person { Name = "John Doe", Age = 30, City = "New York" };
             var person2 = new Person { Name = "John Doe", Age = 30, City = "New York" };
 
             // Act
-            var output = CaptureConsoleOutput(() =>
-            {
-                ExcelReaderProgram.AddPerson(people, person1);
-                ExcelReaderProgram.AddPerson(people, person2);
-            });
+            ExcelReaderProgram.AddPerson(people, person1);
+            ExcelReaderProgram.AddPerson(people, person2);
 
             // Assert
-            Assert.AreEqual(1, people.Count); // Only one unique person should be added
-            Assert.IsTrue(output.Contains("Duplicate entry detected: John Doe, 30, New York")); // Verify log message
+            Assert.AreEqual(1, people.Count); // Only one unique key should be added
+            Assert.AreEqual(2, people["john doe"].Count); // Both persons should be in the list
         }
 
         [TestMethod]
         public void TestAddPerson_CaseInsensitive()
         {
             // Arrange
-            var people = new Dictionary<string, Person>();
+            var people = new Dictionary<string, List<Person>>();
             var person1 = new Person { Name = "John Doe", Age = 30, City = "New York" };
             var person2 = new Person { Name = "john doe", Age = 30, City = "new york" };
 
@@ -98,7 +56,8 @@ namespace ExcelDataReaderTest
             ExcelReaderProgram.AddPerson(people, person2);
 
             // Assert
-            Assert.AreEqual(1, people.Count);
+            Assert.AreEqual(1, people.Count); // Only one unique key should be added
+            Assert.AreEqual(2, people["john doe"].Count); // Both persons should be in the list
         }
     }
 }

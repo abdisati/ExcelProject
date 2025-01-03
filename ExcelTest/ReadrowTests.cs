@@ -73,7 +73,7 @@ namespace ExcelDataReaderTest
             var mockRow = CreateMockRow("John Doe", "invalid_age", "New York");
 
             // Act
-            var output = CaptureConsoleOutput(() => 
+            var output = CaptureConsoleOutput(() =>
             {
                 var person = ExcelReaderProgram.ReadRow(mockRow);
 
