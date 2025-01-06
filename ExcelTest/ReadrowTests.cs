@@ -65,6 +65,25 @@ namespace ExcelDataReaderTest
             Assert.AreEqual(30, person.Age);
             Assert.AreEqual("New York", person.City);
         }
+        [TestMethod]
+        public void TestReadRow_ErrorReadingName_ReturnsDefaultForName()
+        {
+            // Arrange
+            var mockRow = CreateMockRow(1, 30, "New York");
+
+            // Act
+            var output = CaptureConsoleOutput(() =>
+            {
+                var person = ExcelReaderProgram.ReadRow(mockRow);
+
+                // Assert
+                Assert.AreEqual("Unknown", person.Name); // Default value for invalid name
+                Assert.AreEqual(30, person.Age);
+                Assert.AreEqual("New York", person.City);
+            });
+
+            Assert.IsTrue(output.Contains("Error reading 'Name'"), "Expected error message for invalid name not found.");
+        }
 
         [TestMethod]
         public void TestReadRow_InvalidAge_ReturnsDefaultForInvalidAge()
@@ -86,6 +105,8 @@ namespace ExcelDataReaderTest
             Assert.IsTrue(output.Contains("Invalid data type for 'Age'"), "Expected error message for invalid age not found.");
         }
 
+
+
         [TestMethod]
         public void TestReadRow_EmptyCity_ReturnsDefaultForEmptyCity()
         {
@@ -101,16 +122,36 @@ namespace ExcelDataReaderTest
             Assert.AreEqual("Unknown", person.City); // Default value for empty city
         }
 
-        private static IXLRow CreateMockRow(string name, object age, string city)
+        [TestMethod]
+        public void TestReadRow_ErrorReadingCity_ReturnsDefaultForCity()
+        {
+            // Arrange
+            var mockRow = CreateMockRow("John Doe", 30, 33);
+
+            // Act
+            var output = CaptureConsoleOutput(() =>
+            {
+                var person = ExcelReaderProgram.ReadRow(mockRow);
+
+                // Assert
+                Assert.AreEqual("John Doe", person.Name);
+                Assert.AreEqual(30, person.Age);
+                Assert.AreEqual("Unknown", person.City); // Default value for invalid city
+            });
+
+            Assert.IsTrue(output.Contains("Error reading 'City'"), "Expected error message for invalid city not found.");
+        }
+
+        private static IXLRow CreateMockRow(object name, object age, object city)
         {
             var mockRow = new Mock<IXLRow>();
             var mockNameCell = new Mock<IXLCell>();
             var mockAgeCell = new Mock<IXLCell>();
             var mockCityCell = new Mock<IXLCell>();
 
-            mockNameCell.Setup(cell => cell.GetValue<string>()).Returns(name);
+            mockNameCell.Setup(cell => cell.GetValue<object>()).Returns(name);
             mockAgeCell.Setup(cell => cell.GetValue<object>()).Returns(age);
-            mockCityCell.Setup(cell => cell.GetValue<string>()).Returns(city);
+            mockCityCell.Setup(cell => cell.GetValue<object>()).Returns(city);
 
             mockRow.Setup(row => row.Cell(1)).Returns(mockNameCell.Object);
             mockRow.Setup(row => row.Cell(2)).Returns(mockAgeCell.Object);
